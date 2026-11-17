@@ -25,8 +25,15 @@ has to honour, not descriptions of code that exists today:
 
 1. **Consent prompts.** The policy states that an EEA/UK consent prompt and the iOS
    ATT prompt gate personalized ads, and that declining yields non-personalized ads
-   only. That behaviour is the C7 consent/ATT module (AGIAAAA-2449), unimplemented
-   as of this commit. If Screwpile ships without C7, this page is inaccurate.
+   only. That is the C7 consent module — specified in AGIAAAA-2449 §4.6 as a wrapper
+   over the already-vendored AdMob UMP plugin, but **not implemented as of this
+   commit**; the work sits on AGIAAAA-2509.
+
+   Each sentence is conditioned on its platform, so the page stays accurate on an
+   Android-only launch (ATT is iOS-only, and iOS is separately blocked on a Mac and
+   an Apple Developer membership — AGIAAAA-2449 §4.6). What is *not* optional for an
+   Android launch into the EEA/UK is the UMP half: if that ships without working
+   consent gating, this page misdescribes the build.
 2. **No analytics–advertising linkage.** The policy states that analytics data is not
    linked to advertising identifiers for ad targeting. That holds only while the
    Firebase project is *not* linked to Google Ads. Keep it unlinked, or this page and
