@@ -12,15 +12,35 @@ bug this separation avoids.
 
 ## Contents
 
-- `index.html` — privacy policy. **Currently a placeholder.**
-- `support.html` — support / contact page. **Currently a placeholder.**
+- `index.html` — privacy policy. Real copy (AGIAAAA-2653).
+- `support.html` — support / contact page. Real copy (AGIAAAA-2653).
 - `.nojekyll` — disables Jekyll processing; this is a plain static site.
 
-## Before store submission
+## What the pages now assert
 
-Both pages are placeholders and must be replaced with real copy before Screwpile
-is submitted anywhere. Owner: CMO (copy), gated on the M0.7 data-safety answers
-(PM + CTO).
+The privacy policy is written against the approved SDK stack — AdMob, Google Play
+Billing / StoreKit, Firebase Analytics and Firebase Crashlytics — and against the
+M0.7 declarations (AGIAAAA-2477). Two of its statements are commitments the build
+has to honour, not descriptions of code that exists today:
+
+1. **Consent prompts.** The policy states that an EEA/UK consent prompt and the iOS
+   ATT prompt gate personalized ads, and that declining yields non-personalized ads
+   only. That is the C7 consent module — specified in AGIAAAA-2449 §4.6 as a wrapper
+   over the already-vendored AdMob UMP plugin, but **not implemented as of this
+   commit**; the work sits on AGIAAAA-2509.
+
+   Each sentence is conditioned on its platform, so the page stays accurate on an
+   Android-only launch (ATT is iOS-only, and iOS is separately blocked on a Mac and
+   an Apple Developer membership — AGIAAAA-2449 §4.6). What is *not* optional for an
+   Android launch into the EEA/UK is the UMP half: if that ships without working
+   consent gating, this page misdescribes the build.
+2. **No analytics–advertising linkage.** The policy states that analytics data is not
+   linked to advertising identifiers for ad targeting. That holds only while the
+   Firebase project is *not* linked to Google Ads. Keep it unlinked, or this page and
+   both store declarations have to change (Apple "Used to Track You", Play "shared
+   for advertising").
+
+QA verifies both against real network logs before SP-14 submission.
 
 Do **not** copy Squirrel Trigger's privacy policy here. That text states the build
 contains no analytics, advertising or crash-reporting SDK, which is true for
@@ -34,10 +54,14 @@ the wording lives in a Paperclip document and is mirrored here, not authored her
 
 ## How changes land
 
-This initial scaffold was committed directly to `main` (new empty repo, nothing to
+The initial scaffold was committed directly to `main` (new empty repo, nothing to
 review, and GitHub Pages can only build from `main`). **Every content change after
-this one goes via a branch and a pull request**, matching the `squirrel-trigger-web`
-precedent — including the CMO's real privacy and support copy.
+that one goes via a branch and a pull request**, matching the `squirrel-trigger-web`
+precedent.
+
+Verification after any merge to `main` is not a status code alone: fetch both URLs
+and grep the served HTML for the text you expect. Pages serves the previous build
+with a `200` for a minute or two after a push, so a `200` by itself proves nothing.
 
 ## Hosting
 
